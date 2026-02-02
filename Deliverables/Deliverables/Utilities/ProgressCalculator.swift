@@ -1,8 +1,8 @@
 import Foundation
 
 struct ProgressCalculator {
-    /// Calculates logarithmic progress from 100% (at creation) to 0% (at due date)
-    /// Formula: ln(1 + remaining) / ln(1 + total)
+    /// Calculates linear progress from 100% (at creation) to 0% (at due date)
+    /// Formula: (dueAt - currentTime) / (dueAt - createdAt)
     /// - Parameters:
     ///   - createdAt: When the deliverable was created
     ///   - dueAt: When the deliverable is due
@@ -17,16 +17,15 @@ struct ProgressCalculator {
             return 0.0
         }
         
-        // If current time is before creation (edge case), return 1
+        // If current time is before creation (edge case), cap at 100%
         if remaining >= total {
             return 1.0
         }
         
-        // Logarithmic progress: ln(1 + remaining) / ln(1 + total)
-        // Adding 1 to avoid log(0) issues
-        let progress = log(1 + remaining) / log(1 + total)
+        // Linear progress: remaining / total
+        let progress = remaining / total
         
-        return min(max(progress, 0.0), 1.0)
+        return progress
     }
     
     /// Returns the progress for a deliverable
