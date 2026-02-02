@@ -1,0 +1,58 @@
+# Xcode
+## Build generated
+build/
+DerivedData/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+## User-specific files
+*.xcuserstate
+*.xcuserdatad/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+## Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+## CocoaPods (if ever used)
+Pods/
+
+## Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+## Xcode Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+## Archives
+*.xcarchive
+
+## Code Injection
+.idea/
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Sparkle (if re-added later)
+*.sparkle_ed25519
