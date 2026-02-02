@@ -89,6 +89,9 @@ struct MenuBarView: View {
         }
         .frame(width: 320)
         .background(Color.white)
+        .onReceive(NotificationCenter.default.publisher(for: .showCreateDeliverable)) { _ in
+            showCreateSheet = true
+        }
     }
 }
 
