@@ -6,6 +6,7 @@ struct DeliverableRow: View {
     let onEdit: (Deliverable) -> Void
     let onDelete: () -> Void
     
+    @Environment(\.colorScheme) var colorScheme
     @State private var showDeleteConfirmation = false
     @State private var showEditSheet = false
     @State private var isHoveringProgress = false
@@ -13,6 +14,27 @@ struct DeliverableRow: View {
     
     // Timer for real-time countdown updates
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    // Adaptive colors
+    private var cardBackgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.18) : Color.white
+    }
+    
+    private var primaryTextColor: Color {
+        Color(NSColor.labelColor)
+    }
+    
+    private var secondaryTextColor: Color {
+        Color(NSColor.secondaryLabelColor)
+    }
+    
+    private var buttonBackgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.25) : Color(white: 0.95)
+    }
+    
+    private var buttonForegroundColor: Color {
+        Color(NSColor.secondaryLabelColor)
+    }
     
     private var progress: Double {
         ProgressCalculator.calculateProgress(
@@ -54,7 +76,7 @@ struct DeliverableRow: View {
                 // Title
                 Text(deliverable.title)
                     .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(white: 0.1))
+                    .foregroundColor(primaryTextColor)
                     .lineLimit(1)
                 
                 Spacer()
@@ -65,11 +87,11 @@ struct DeliverableRow: View {
                     Button(action: { showEditSheet = true }) {
                         Image(systemName: "pencil")
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(Color(white: 0.4))
+                            .foregroundColor(buttonForegroundColor)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 24, height: 24)
-                    .background(Color(white: 0.95))
+                    .background(buttonBackgroundColor)
                     .cornerRadius(4)
                     .help("Edit")
                     
@@ -77,11 +99,11 @@ struct DeliverableRow: View {
                     Button(action: onComplete) {
                         Image(systemName: "checkmark")
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(Color(white: 0.4))
+                            .foregroundColor(buttonForegroundColor)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 24, height: 24)
-                    .background(Color(white: 0.95))
+                    .background(buttonBackgroundColor)
                     .cornerRadius(4)
                     .help("Mark as complete")
                     
@@ -89,11 +111,11 @@ struct DeliverableRow: View {
                     Button(action: { showDeleteConfirmation = true }) {
                         Image(systemName: "trash")
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(Color(white: 0.4))
+                            .foregroundColor(buttonForegroundColor)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 24, height: 24)
-                    .background(Color(white: 0.95))
+                    .background(buttonBackgroundColor)
                     .cornerRadius(4)
                     .help("Delete")
                 }
@@ -109,7 +131,7 @@ struct DeliverableRow: View {
             // Due date (shows real-time remaining countdown on hover)
             Text(isHoveringProgress ? remainingTimeDisplay : deliverable.formattedDueDate)
                 .font(.system(size: 10, weight: .light))
-                .foregroundColor(isOverdue ? Color.red : Color(white: 0.42))
+                .foregroundColor(isOverdue ? Color.red : secondaryTextColor)
                 .animation(.easeInOut(duration: 0.15), value: isHoveringProgress)
                 .onReceive(timer) { time in
                     currentTime = time
@@ -117,7 +139,7 @@ struct DeliverableRow: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .background(Color.white)
+        .background(cardBackgroundColor)
         .cornerRadius(8)
         .alert("Delete Deliverable?", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }

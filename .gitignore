@@ -53,6 +53,3 @@ playground.xcworkspace
 *.ipa
 *.dSYM.zip
 *.dSYM
-
-## Sparkle (if re-added later)
-*.sparkle_ed25519

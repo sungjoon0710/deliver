@@ -2,11 +2,33 @@ import SwiftUI
 
 struct MenuBarView: View {
     @ObservedObject var dataStore: DataStore
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var showCreateSheet = false
     
     private var sortedDeliverables: [Deliverable] {
         dataStore.sortedDeliverables
+    }
+    
+    // Adaptive colors
+    private var backgroundColor: Color {
+        Color(NSColor.windowBackgroundColor)
+    }
+    
+    private var primaryTextColor: Color {
+        Color(NSColor.labelColor)
+    }
+    
+    private var secondaryTextColor: Color {
+        Color(NSColor.secondaryLabelColor)
+    }
+    
+    private var tertiaryTextColor: Color {
+        Color(NSColor.tertiaryLabelColor)
+    }
+    
+    private var buttonBackgroundColor: Color {
+        Color(NSColor.controlBackgroundColor)
     }
     
     var body: some View {
@@ -15,7 +37,7 @@ struct MenuBarView: View {
             HStack {
                 Text("Deliverables")
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(Color(white: 0.1))
+                    .foregroundColor(primaryTextColor)
                 
                 Spacer()
                 
@@ -23,11 +45,11 @@ struct MenuBarView: View {
                 Button(action: { showCreateSheet = true }) {
                     Image(systemName: "plus")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(Color(white: 0.4))
+                        .foregroundColor(secondaryTextColor)
                 }
                 .buttonStyle(.plain)
                 .frame(width: 24, height: 24)
-                .background(Color(white: 0.95))
+                .background(buttonBackgroundColor)
                 .cornerRadius(4)
                 .help("Add new deliverable")
             }
@@ -51,15 +73,15 @@ struct MenuBarView: View {
                 VStack(spacing: 8) {
                     Image(systemName: "checkmark.circle")
                         .font(.system(size: 32, weight: .light))
-                        .foregroundColor(Color(white: 0.7))
+                        .foregroundColor(tertiaryTextColor)
                     
                     Text("No deliverables")
                         .font(.system(size: 12))
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(secondaryTextColor)
                     
                     Text("Click + to add one")
                         .font(.system(size: 10))
-                        .foregroundColor(Color(white: 0.6))
+                        .foregroundColor(tertiaryTextColor)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 40)
@@ -88,7 +110,7 @@ struct MenuBarView: View {
             }
         }
         .frame(width: 320)
-        .background(Color.white)
+        .background(backgroundColor)
         .onReceive(NotificationCenter.default.publisher(for: .showCreateDeliverable)) { _ in
             showCreateSheet = true
         }

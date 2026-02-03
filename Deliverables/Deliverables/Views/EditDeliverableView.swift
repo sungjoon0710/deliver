@@ -5,11 +5,38 @@ struct EditDeliverableView: View {
     let deliverable: Deliverable
     let onSave: (Deliverable) -> Void
     
+    @Environment(\.colorScheme) var colorScheme
     @State private var title: String = ""
     @State private var dueDate: Date = Date()
     
     private var isValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    // Adaptive colors
+    private var backgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.2) : Color.white
+    }
+    
+    private var primaryTextColor: Color {
+        Color(NSColor.labelColor)
+    }
+    
+    private var secondaryTextColor: Color {
+        Color(NSColor.secondaryLabelColor)
+    }
+    
+    private var inputBackgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.15) : Color(white: 0.97)
+    }
+    
+    private var buttonBackgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.25) : Color(white: 0.95)
+    }
+    
+    // Cypress green for primary action
+    private var accentColor: Color {
+        Color(red: 0.290, green: 0.486, blue: 0.349)
     }
     
     var body: some View {
@@ -18,18 +45,18 @@ struct EditDeliverableView: View {
             HStack {
                 Text("Edit Deliverable")
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(Color(white: 0.1))
+                    .foregroundColor(primaryTextColor)
                 
                 Spacer()
                 
                 Button(action: { isPresented = false }) {
                     Image(systemName: "xmark")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(Color(white: 0.4))
+                        .foregroundColor(secondaryTextColor)
                 }
                 .buttonStyle(.plain)
                 .frame(width: 20, height: 20)
-                .background(Color(white: 0.95))
+                .background(buttonBackgroundColor)
                 .cornerRadius(10)
             }
             
@@ -39,13 +66,13 @@ struct EditDeliverableView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Title")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(Color(white: 0.42))
+                    .foregroundColor(secondaryTextColor)
                 
                 TextField("Enter deliverable name...", text: $title)
                     .textFieldStyle(.plain)
                     .font(.system(size: 12))
                     .padding(8)
-                    .background(Color(white: 0.97))
+                    .background(inputBackgroundColor)
                     .cornerRadius(6)
                     .onSubmit {
                         if isValid {
@@ -58,7 +85,7 @@ struct EditDeliverableView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Due Date")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(Color(white: 0.42))
+                    .foregroundColor(secondaryTextColor)
                 
                 DatePicker(
                     "",
@@ -80,10 +107,10 @@ struct EditDeliverableView: View {
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 11))
-                .foregroundColor(Color(white: 0.4))
+                .foregroundColor(secondaryTextColor)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color(white: 0.95))
+                .background(buttonBackgroundColor)
                 .cornerRadius(4)
                 
                 Button("Save") {
@@ -94,13 +121,13 @@ struct EditDeliverableView: View {
                 .foregroundColor(.white)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(isValid ? Color(red: 0.07, green: 0.03, blue: 0.17) : Color.gray)
+                .background(isValid ? accentColor : Color.gray)
                 .cornerRadius(4)
                 .disabled(!isValid)
             }
         }
         .padding(16)
-        .background(Color.white)
+        .background(backgroundColor)
         .cornerRadius(10)
         .onAppear {
             // Pre-populate with existing values

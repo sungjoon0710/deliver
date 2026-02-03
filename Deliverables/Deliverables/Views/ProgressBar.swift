@@ -4,7 +4,17 @@ struct ProgressBar: View {
     let progress: Double
     let isOverdue: Bool
     
-    private let trackColor = Color(white: 0.9) // #E5E5E5
+    @Environment(\.colorScheme) var colorScheme
+    
+    // Adaptive track color
+    private var trackColor: Color {
+        colorScheme == .dark ? Color(white: 0.3) : Color(white: 0.9)
+    }
+    
+    // Subtle border color (more visible in dark mode)
+    private var borderColor: Color {
+        colorScheme == .dark ? Color(white: 0.45) : Color(white: 0.8)
+    }
     
     /// Inferno color scheme: dark purple (100%) → magenta → red → orange (0%)
     private var infernoColor: Color {
@@ -36,18 +46,23 @@ struct ProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                // Background track
-                RoundedRectangle(cornerRadius: 3)
+                // Background track with subtle border
+                RoundedRectangle(cornerRadius: 4)
                     .fill(trackColor)
-                    .frame(height: 6)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(borderColor, lineWidth: 0.5)
+                    )
+                    .frame(height: 8)
                 
-                // Progress fill (right-aligned)
+                // Progress fill
                 RoundedRectangle(cornerRadius: 3)
                     .fill(infernoColor)
-                    .frame(width: max(0, geometry.size.width * progress), height: 6)
+                    .frame(width: max(0, (geometry.size.width - 2) * progress), height: 6)
+                    .padding(.leading, 1)
             }
         }
-        .frame(height: 6)
+        .frame(height: 8)
     }
 }
 
